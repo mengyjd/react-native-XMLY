@@ -1,15 +1,14 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import {test} from '@/utils/index'
-test()
-class App extends React.Component {
+import React from 'react'
+import Navigator from '@/navigator/index'
+import { Provider } from 'react-redux'
+import store from '@/config/dva'
+export default class extends React.Component {
   render() {
     return (
-      <View>
-        <Text>test</Text>
-      </View>
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
     )
   }
 }
 
-export default App
