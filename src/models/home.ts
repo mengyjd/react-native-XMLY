@@ -3,7 +3,7 @@
  * @Author: 高锐
  * @Date: 2020-12-12 17:12:18
  * @LastEditors: 高锐
- * @LastEditTime: 2020-12-17 21:12:17
+ * @LastEditTime: 2020-12-18 23:53:35
  */
 import axios from 'axios';
 import {Effect, Model} from 'dva-core-ts';
@@ -21,9 +21,19 @@ export interface IGuess {
   image: string;
 }
 
+export interface IChannel {
+  id: string;
+  image: string;
+  title: string;
+  played: number;
+  playing: number;
+  remark: number;
+}
+
 interface HomeState {
   carousels: ICarousel[];
   guess: IGuess[];
+  channel: IChannel[];
 }
 
 interface HomeModel extends Model {
@@ -35,12 +45,14 @@ interface HomeModel extends Model {
   effects: {
     fetchCarousels: Effect;
     fetchGuess: Effect;
+    fetchChannel: Effect;
   };
 }
 
 const initialState = {
   carousels: [],
   guess: [],
+  channel: [],
 };
 
 const homeModel: HomeModel = {
@@ -66,15 +78,25 @@ const homeModel: HomeModel = {
       });
     },
     *fetchGuess(_, {call, put}) {
-      const data = yield call(axios.get, '/guess')
+      const data = yield call(axios.get, '/guess');
 
       yield put({
         type: 'setState',
         payload: {
-          guess: data.data
-        }
-      })
-    }
+          guess: data.data,
+        },
+      });
+    },
+    *fetchChannel(_, {call, put}) {
+      const data = yield call(axios.get, '/channel');
+      
+      yield put({
+        type: 'setState',
+        payload: {
+          channel: data.data.results,
+        },
+      });
+    },
   },
 };
 

@@ -3,19 +3,30 @@
  * @Author: 高锐
  * @Date: 2020-12-11 14:52:30
  * @LastEditors: 高锐
- * @LastEditTime: 2020-12-18 21:46:29
+ * @LastEditTime: 2020-12-18 23:55:15
  */
 import React from 'react';
-import {Button, ScrollView, Text, View} from 'react-native';
+import {
+  Button,
+  FlatList,
+  ListRenderItemInfo,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {RootStackNavigation} from '@/navigator/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '@/models/index';
 import Carousel from './Carousel';
 import Guess from './Guess';
+import Channel from './Channel';
+import ChannelItem from './ChannelItem';
+import {IChannel} from '@/models/home';
 
 const mapStateToProps = ({home, loading}: RootState) => {
   return {
     carousels: home.carousels,
+    channel: home.channel,
     loading: loading.effects['home/fetchCarousels'],
   };
 };
@@ -34,42 +45,41 @@ class Home extends React.Component<IProps> {
     dispatch({
       type: 'home/fetchCarousels',
     });
+    
+    dispatch({
+      type: 'home/fetchChannel',
+    });
   }
 
-  onPress = () => {
-    const {navigation} = this.props;
-    navigation.navigate('Detail', {
-      id: 100,
-    });
-  };
+  onPressChannelItem(data: IChannel) {
+    console.log(data);
+  }
 
-  handleAdd = () => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'home/add',
-      payload: {
-        num: 10,
-      },
-    });
-  };
+  get header() {
+    return (
+      <View>
+        <Carousel data={this.props.carousels} />
+        <Guess />
+      </View>
+    );
+  }
 
-  handleAsyncAdd = () => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'home/asyncAdd',
-      payload: {
-        num: 100,
-      },
-    });
-  };
+  renderItem = ({item}: ListRenderItemInfo<IChannel>) => (
+    <ChannelItem data={item} onPress={this.onPressChannelItem}/>
+  );
+
+  keyExtractor = (item: IChannel) => {
+    return item.id
+  }
 
   render() {
-    const {carousels} = this.props;
     return (
-      <ScrollView>
-        <Carousel data={carousels} />
-        <Guess />
-      </ScrollView>
+      <FlatList
+        ListHeaderComponent={this.header}
+        data={this.props.channel}
+        renderItem={this.renderItem}
+        keyExtractor={this.keyExtractor}
+      />
     );
   }
 }

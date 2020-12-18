@@ -18,23 +18,29 @@ const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 
 class Guess extends Component<ModelState> {
+
   componentDidMount() {
-    this.fetch();
+    this.fetch()
   }
 
   fetch = () => {
-    const {dispatch} = this.props;
+    const {dispatch} = this.props
     dispatch({
       type: 'home/fetchGuess',
     });
-  };
+  }
+
+  onPress = (item: IGuess) => {
+    console.log('onPress guess:::::');
+    console.log(item);
+  }
 
   renderItem = ({item}: {item: IGuess}) => {
     return (
       <Touchable
         style={styles.item}
         onPress={() => {
-          alert('123');
+          this.onPress(item)
         }}>
         <Image source={{uri: item.image}} style={styles.image} />
         <Text numberOfLines={2}>{item.title}</Text>
