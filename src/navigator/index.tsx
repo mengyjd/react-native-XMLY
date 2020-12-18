@@ -3,13 +3,11 @@
  * @Author: 高锐
  * @Date: 2020-12-11 14:55:27
  * @LastEditors: 高锐
- * @LastEditTime: 2020-12-11 22:57:29
+ * @LastEditTime: 2020-12-12 23:44:19
  */
 import {
   getFocusedRouteNameFromRoute,
   NavigationContainer,
-  RouteProp,
-  TabNavigationState,
 } from '@react-navigation/native';
 import React from 'react';
 import {
@@ -19,7 +17,7 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import Detail from '@/pages/Detail';
-import {Platform, StyleSheet} from 'react-native';
+import {Platform, StatusBar, StyleSheet} from 'react-native';
 import BottomTabs from './BottomTabs';
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
@@ -45,7 +43,7 @@ function getHeaderTitle(route: any) {
   const routeName = getFocusedRouteNameFromRoute(route);
 
   switch (routeName) {
-    case 'Home':
+    case 'HomeTabs':
       return '首页';
     case 'Listen':
       return '我听';
@@ -70,6 +68,7 @@ class Navigator extends React.Component {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             gestureEnabled: true,
             gestureDirection: 'horizontal',
+            headerStatusBarHeight: StatusBar.currentHeight,
             headerStyle: {
               ...Platform.select({
                 android: {
@@ -83,7 +82,7 @@ class Navigator extends React.Component {
             name="BottomTabs"
             component={BottomTabs}
             options={({route}) => ({
-              headerTitle: getHeaderTitle(route)
+              headerTitle: getHeaderTitle(route),
             })}
           />
           <Stack.Screen

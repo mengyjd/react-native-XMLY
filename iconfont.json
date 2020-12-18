@@ -1,7 +1,7 @@
 {
-    "symbol_url": "请参考README.md，复制官网提供的JS链接",
-    "use_typescript": false,
-    "save_dir": "./src/iconfont",
+    "symbol_url": "http://at.alicdn.com/t/font_2266522_uyndhnk9hn.js",
+    "use_typescript": true,
+    "save_dir": "./src/assets/iconfont",
     "trim_icon_prefix": "icon",
     "default_icon_size": 18,
     "local_svgs": "./localSvgs"

@@ -3,18 +3,20 @@
  * @Author: 高锐
  * @Date: 2020-12-11 14:52:30
  * @LastEditors: 高锐
- * @LastEditTime: 2020-12-12 18:27:31
+ * @LastEditTime: 2020-12-18 21:46:29
  */
 import React from 'react';
-import {Button, Text, View} from 'react-native';
+import {Button, ScrollView, Text, View} from 'react-native';
 import {RootStackNavigation} from '@/navigator/index';
 import {connect, ConnectedProps} from 'react-redux';
-import {RootState} from '../models';
+import {RootState} from '@/models/index';
+import Carousel from './Carousel';
+import Guess from './Guess';
 
 const mapStateToProps = ({home, loading}: RootState) => {
   return {
-    num: home.num,
-    loading: loading.effects['home/asyncAdd']
+    carousels: home.carousels,
+    loading: loading.effects['home/fetchCarousels'],
   };
 };
 
@@ -27,6 +29,13 @@ interface IProps extends ModelState {
 }
 
 class Home extends React.Component<IProps> {
+  componentDidMount() {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'home/fetchCarousels',
+    });
+  }
+
   onPress = () => {
     const {navigation} = this.props;
     navigation.navigate('Detail', {
@@ -55,15 +64,12 @@ class Home extends React.Component<IProps> {
   };
 
   render() {
-    const {num, loading} = this.props;
+    const {carousels} = this.props;
     return (
-      <View>
-        <Text>Home{num}</Text>
-        <Text>{loading ? '正在计算中...' : ''}</Text>
-        <Button title="加" onPress={this.handleAdd} />
-        <Button title="异步加" onPress={this.handleAsyncAdd} />
-        <Button title="跳转到详情页" onPress={this.onPress} />
-      </View>
+      <ScrollView>
+        <Carousel data={carousels} />
+        <Guess />
+      </ScrollView>
     );
   }
 }
